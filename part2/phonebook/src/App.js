@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
-import axios from 'axios'
+import personsService from './services/Contact'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -16,22 +16,58 @@ const App = () => {
     
     const contact = {
       name: newName,
-      number: newNumber,
-      id: persons.length + 1
+      number: newNumber
     }
 
-    if (persons.some(person => person.name === contact.name)) {
+    let oldContact = persons.find(person => person.name === contact.name);
+    if (oldContact !== undefined) {
       console.log("Contact exists")
-      alert(`${contact.name} already exists`)
+      if (window.confirm(`${contact.name} is already added, replace the old number?`)) {
+        handleUpdatePerson(oldContact, contact)
+      }
       return
     }
-    
-    let tempPersons = persons.concat(contact)
 
-    setPersons(tempPersons)
-    setPersonsToShow(tempPersons)
-    setNewName('')
-    setNewNumber('')
+    personsService
+      .create(contact)
+      .then(response => {
+        setPersons(persons.concat(response.data))
+        setPersonsToShow(persons.concat(response.data))
+
+        setNewName('')
+        setNewNumber('')
+      })
+
+  }
+
+  const handleUpdatePerson = (oldContact, contact) => {
+
+    contact = { ...oldContact, number: contact.number}
+
+    personsService.update(contact.id, contact)
+      .then(() => {
+        personsService.getAll().then(response => {
+          console.log("Fetched all contacts")
+          console.log(response.data)
+        setPersons(response.data)
+        setPersonsToShow(response.data)
+      })
+    })
+  }
+
+  const handleDelete = (contact) => {
+
+    if (window.confirm(`Do you want to delete ${contact.name}`)) {
+      personsService
+        .remove(contact.id)
+        .then(() => {
+          personsService.getAll().then(response => {
+            setPersons(response.data)
+            setPersonsToShow(response.data)
+          })
+        })
+    }
+
   }
 
   const handleNameChange = (event) => {
@@ -55,8 +91,8 @@ const App = () => {
   }
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
+    personsService
+      .getAll()
       .then(response => {
         console.log('promise fulfilled')
         setPersons(response.data)
@@ -69,9 +105,9 @@ const App = () => {
       <h2>Filter</h2>
       <Filter newFilter={newFilter} handleFilterChange={handleFilterChange} />
       <h2>Phonebook</h2>
-      <PersonForm addContact={addContact} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={handleNumberChange}/>
+      <PersonForm addContact={addContact} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={handleNumberChange} handleUpdatePerson={handleUpdatePerson}/>
       <h2>Numbers</h2>
-      <Persons personsToShow={personsToShow}/>
+      <Persons personsToShow={personsToShow} handleDelete={handleDelete}/>
     </div>
   )
 }
