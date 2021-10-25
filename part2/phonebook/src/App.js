@@ -3,6 +3,9 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import personsService from './services/Contact'
+import Notification from './components/Notification'
+
+import './index.css'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -10,6 +13,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
+  const [message, setMessage] = useState(null)
+  const [messageType, setMessageType] = useState(false)
 
   const addContact = (event) => {
     event.preventDefault()
@@ -36,6 +41,14 @@ const App = () => {
 
         setNewName('')
         setNewNumber('')
+
+        setMessage(
+          `Added ${response.data.name}`
+        )
+        setMessageType(true)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
       })
 
   }
@@ -49,8 +62,15 @@ const App = () => {
         personsService.getAll().then(response => {
           console.log("Fetched all contacts")
           console.log(response.data)
-        setPersons(response.data)
-        setPersonsToShow(response.data)
+          setPersons(response.data)
+          setPersonsToShow(response.data)
+          setMessage(
+            `Changed ${contact.name}'s phone number`
+          )
+          setMessageType(true)
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
       })
     })
   }
@@ -66,6 +86,15 @@ const App = () => {
             setPersonsToShow(response.data)
           })
         })
+        .catch(error => {
+          setMessage(
+            `Information of ${contact.name} already deleted`
+          )
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
+          setMessageType(false)
+      })
     }
 
   }
@@ -102,6 +131,7 @@ const App = () => {
 
   return (
     <div>
+      <Notification message={message} messageType={messageType}></Notification>
       <h2>Filter</h2>
       <Filter newFilter={newFilter} handleFilterChange={handleFilterChange} />
       <h2>Phonebook</h2>
