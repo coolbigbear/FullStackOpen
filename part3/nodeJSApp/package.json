@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "node index.js",
     "build:ui": "rm -rf build && cd ../../part2/phonebook && npm run build --prod && cp -r build ../../part3/nodeJSApp ",
     "deploy:heroku": "cd ../.. && git push heroku `git subtree split --prefix part3/nodeJSApp master`:master --force",
     "build-deploy": "npm run build:ui && git add . && git commit -m uibuild && git push && npm run deploy:heroku",
