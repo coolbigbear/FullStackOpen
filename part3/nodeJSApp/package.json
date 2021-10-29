@@ -9,6 +9,7 @@
     "deploy:heroku": "cd ../.. && git push heroku `git subtree split --prefix part3/nodeJSApp master`:master --force",
     "build-deploy": "npm run build:ui && git add . && git commit -m uibuild && git push && npm run deploy:heroku",
     "dev": "nodemon index.js",
+    "lint": "eslint .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -18,9 +19,16 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "mongoose": "^6.0.12",
+    "mongoose-unique-validator": "^3.0.0",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.1",
     "nodemon": "^2.0.14"
   }
 }

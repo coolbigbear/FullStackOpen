@@ -50,6 +50,11 @@ const App = () => {
           setMessage(null)
         }, 5000)
       })
+      .catch(error => {
+        console.log(error.response)
+        setMessage(error.response.data.error)
+        setMessageType(false)
+      })
 
   }
 
@@ -68,6 +73,8 @@ const App = () => {
             `Changed ${contact.name}'s phone number`
           )
           setMessageType(true)
+          setNewName('')
+          setNewNumber('')
           setTimeout(() => {
             setMessage(null)
           }, 5000)
