@@ -5,6 +5,7 @@ const url = process.env.MONGODB_URI
 
 console.log('connecting to', url)
 
+
 mongoose.set('runValidators', true);
 mongoose.connect(url)
     .then(() => {
