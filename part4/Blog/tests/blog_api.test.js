@@ -27,13 +27,11 @@ const initialBlogs = [
 
 beforeEach(async () => {
     await Blog.deleteMany({})
-    let blogObject = new Blog(initialBlogs[0])
-    await blogObject.save()
-    blogObject = new Blog(initialBlogs[1])
-    await blogObject.save()
-    blogObject = new Blog(initialBlogs[2])
-    await blogObject.save()
-}, 10000)
+    for (let blog of initialBlogs) {
+        let blogObject = new Blog(blog)
+        await blogObject.save()
+    }
+})
 
 describe('when database contains prefilled data', () => {
 
@@ -57,7 +55,6 @@ describe('when database contains prefilled data', () => {
 
     test('note uses "id" instead of "_id"', async () => {
         const response = await api.get('/api/blogs')
-
         expect(response.body[0].id).toBeDefined()
     })
 
@@ -71,17 +68,36 @@ describe('when database contains prefilled data', () => {
     test('if likes property is missing from POST request it will default to 0', async () => {
         blog = { title: "newTitle", author: "newAuthor", url: "newURL" }
         response = await api.post('/api/blogs').send(blog)
-
+        
         //Check if note is the same as the one sent
         response = await api.get(`/api/blogs`)
         expect(response.body[initialBlogs.length].likes).toEqual(0)
     })
-
+    
     test('if title or url is missing from POST request it will return 400', async () => {
         blog = { author: "newAuthor", likes: 5 }
         response = await api.post('/api/blogs').send(blog).expect(400)
-    },10000)
+    })
 
+    test('removing a note works', async () => {
+        response = await api.get(`/api/blogs`)
+        response = await api.delete(`/api/blogs/${response.body[0].id}`)
+        expect(response.status).toEqual(204)
+        
+        response = await api.get(`/api/blogs`)
+        expect(response.body.length).toEqual(initialBlogs.length - 1)
+    })
+    
+    test('updating a note works', async () => {
+        blog = { title: "updatedTitle", author: "updatedAuthor", url: "updatedURL", likes: 1 }
+
+        response = await api.get(`/api/blogs`)
+        response = await api.put(`/api/blogs/${response.body[0].id}`).send(blog)
+        blog.id = response.body.id
+
+        response = await api.get(`/api/blogs`)
+        expect(response.body[0]).toEqual(blog)
+    })
 })
 
 afterAll(async () => {
