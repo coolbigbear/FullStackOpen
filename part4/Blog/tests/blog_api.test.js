@@ -55,19 +55,33 @@ describe('when database contains prefilled data', () => {
         expect(response.body[initialBlogs.length]).toEqual(blog)
     })
 
-})
+    test('note uses "id" instead of "_id"', async () => {
+        const response = await api.get('/api/blogs')
 
-test('blogs are returned as json', async () => {
-    await api
-        .get('/api/blogs')
-        .expect(200)
-        .expect('Content-Type', /application\/json/)
-})
+        expect(response.body[0].id).toBeDefined()
+    })
 
-test('note uses "id" instead of "_id"', async () => {
-    const response = await api.get('/api/blogs')
+    test('blogs are returned as json', async () => {
+        await api
+            .get('/api/blogs')
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
+    })
 
-    expect(response.body[0].id).toBeDefined()
+    test('if likes property is missing from POST request it will default to 0', async () => {
+        blog = { title: "newTitle", author: "newAuthor", url: "newURL" }
+        response = await api.post('/api/blogs').send(blog)
+
+        //Check if note is the same as the one sent
+        response = await api.get(`/api/blogs`)
+        expect(response.body[initialBlogs.length].likes).toEqual(0)
+    })
+
+    test('if title or url is missing from POST request it will return 400', async () => {
+        blog = { author: "newAuthor", likes: 5 }
+        response = await api.post('/api/blogs').send(blog).expect(400)
+    },10000)
+
 })
 
 afterAll(async () => {

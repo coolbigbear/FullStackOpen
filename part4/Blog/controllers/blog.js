@@ -6,11 +6,15 @@ BlogRouter.get('/', async (request, response) => {
     return response.json(blogs)
 })
 
-BlogRouter.post('/', async (request, response) => {
+BlogRouter.post('/', async (request, response, next) => {
     const blog = new Blog(request.body)
 
-    result = await blog.save()
-    response.status(201).json(result)
+    try {
+        result = await blog.save()
+        response.status(201).json(result)
+    } catch (error) {
+        next(error)
+    }
     
 })
 
