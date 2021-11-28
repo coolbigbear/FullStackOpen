@@ -1,4 +1,3 @@
-const { result, maxBy } = require('lodash')
 var _ = require('lodash')
 
 const dummy = (blogs) => {
