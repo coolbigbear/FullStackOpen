@@ -26,14 +26,8 @@ BlogRouter.post('/', middleware.middlewareExtractor, async (request, response, n
 
 BlogRouter.put('/:id', middleware.middlewareExtractor, async (request, response, next) => {
 
-    blog = await Blog.findById(request.params.id)
-    if (blog.user.toString() === request.user.id) {
-        result = await Blog.findByIdAndUpdate(request.params.id, request.body, { new: true })
-    }
+    result = await Blog.findByIdAndUpdate(request.params.id, request.body, { new: true })
     response.status(200).json(result)
-
-    // result = await Blog.findOneAndUpdate(request.params.id, request.body, { new: true })
-    // response.status(200).json(result)
 })
 
 BlogRouter.delete('/:id', middleware.middlewareExtractor, async (request, response, next) => {
