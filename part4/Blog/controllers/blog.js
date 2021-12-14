@@ -24,7 +24,7 @@ BlogRouter.post('/', middleware.middlewareExtractor, async (request, response, n
     response.status(201).json(result)    
 })
 
-BlogRouter.put('/:id', middleware.middlewareExtractor, async (request, response, next) => {
+BlogRouter.put('/:id', async (request, response, next) => {
 
     result = await Blog.findByIdAndUpdate(request.params.id, request.body, { new: true })
     response.status(200).json(result)
