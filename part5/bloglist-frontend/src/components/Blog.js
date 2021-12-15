@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-const Blog = ({ blog, likeBlog }) => {
+const Blog = ({ blog, likeBlog, deleteBlog, username }) => {
 
   const [fullyShown, setFullyShown] = useState(false)
   
@@ -15,7 +15,7 @@ const Blog = ({ blog, likeBlog }) => {
     setFullyShown(!fullyShown)
   }
 
-  const packageObject = () => {
+  const packageObjectLikeBlog = () => {
     likeBlog({
       id: blog.id,
       title: blog.title,
@@ -25,13 +25,25 @@ const Blog = ({ blog, likeBlog }) => {
     })
   } 
 
+  const packageObjectDeleteBlog = () => {
+    if (window.confirm(`Do you want to delete ${blog.title}?`)) {
+      deleteBlog({
+        id: blog.id
+      })
+    }
+  } 
+
   if (fullyShown) {
     return (
       <div style={blogStyle}>
         <p>{blog.title}</p>
         <p>{blog.author}</p>
         <p>{blog.url}</p>
-        <p>likes {blog.likes} <button onClick={packageObject}>like</button></p>
+        <p>likes {blog.likes} <button onClick={packageObjectLikeBlog}>like</button></p>
+        <p>{blog.user.username}</p>
+        { blog.user.username === username &&
+          <button onClick={packageObjectDeleteBlog}>Delete</button>
+        }
         <button onClick={toggleFullyShown}>Show less</button>
       </div>
     )

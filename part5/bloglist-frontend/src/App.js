@@ -90,10 +90,25 @@ const App = () => {
             setTimeout(() => {
               setErrorMessage(null)
             }, 5000)
-          }
-          )
+          })
       })
   }
+
+  const deleteBlog = (blogObject) => {
+    blogService
+      .del(blogObject)
+      .then(returnedBlog => {
+        blogService.getAll()
+          .then(blogs => {
+            setBlogs(blogs)
+            setErrorMessage(`Deleted ${returnedBlog.title}`)
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 5000)
+          })
+      })
+  }
+
 
 
   if (user === null) {
@@ -138,8 +153,10 @@ const App = () => {
           createBlog={createBlog}
         />
       </Togglable>
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} likeBlog={likeBlog}/>
+      {blogs
+        .sort((a, b) => parseFloat(b.likes) - parseFloat(a.likes))
+        .map(blog =>
+          <Blog key={blog.id} blog={blog} likeBlog={likeBlog} deleteBlog={deleteBlog} username={user.username}/>
       )}
     </div>
   )
