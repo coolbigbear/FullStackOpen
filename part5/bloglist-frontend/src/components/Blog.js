@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
+
 const Blog = ({ blog, likeBlog, deleteBlog, username }) => {
 
   const [fullyShown, setFullyShown] = useState(false)
-  
+
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -23,7 +25,7 @@ const Blog = ({ blog, likeBlog, deleteBlog, username }) => {
       url: blog.url,
       likes: blog.likes + 1
     })
-  } 
+  }
 
   const packageObjectDeleteBlog = () => {
     if (window.confirm(`Do you want to delete ${blog.title}?`)) {
@@ -31,7 +33,7 @@ const Blog = ({ blog, likeBlog, deleteBlog, username }) => {
         id: blog.id
       })
     }
-  } 
+  }
 
   if (fullyShown) {
     return (
@@ -57,6 +59,13 @@ const Blog = ({ blog, likeBlog, deleteBlog, username }) => {
       </div>
     </div>
   )
+}
+
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  likeBlog: PropTypes.func.isRequired,
+  deleteBlog: PropTypes.func.isRequired,
+  username: PropTypes.string.isRequired
 }
 
 export default Blog

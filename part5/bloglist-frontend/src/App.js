@@ -9,7 +9,7 @@ import loginService from './services/login'
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('') 
+  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
 
@@ -19,7 +19,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [user])
 
   useEffect(() => {
@@ -31,9 +31,9 @@ const App = () => {
     }
   }, [])
 
-  const logOut = async (event) => {
+  const logOut = async () => {
     window.localStorage.removeItem('loggedBlogAppUser')
-    window.location.reload(false);
+    window.location.reload(false)
     setErrorMessage('Successfully logged out')
     setTimeout(() => {
       setErrorMessage(null)
@@ -71,11 +71,14 @@ const App = () => {
     blogService
       .create(blogObject)
       .then(returnedBlog => {
-        setBlogs(blogs.concat(returnedBlog))
-        setErrorMessage('Created new blog entry')
-        setTimeout(() => {
-          setErrorMessage(null)
-        }, 5000)
+        blogService.getAll()
+          .then(blogs => {
+            setBlogs(blogs)
+            setErrorMessage(`Create ${returnedBlog.title}`)
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 5000)
+          })
       })
   }
 
@@ -157,7 +160,7 @@ const App = () => {
         .sort((a, b) => parseFloat(b.likes) - parseFloat(a.likes))
         .map(blog =>
           <Blog key={blog.id} blog={blog} likeBlog={likeBlog} deleteBlog={deleteBlog} username={user.username}/>
-      )}
+        )}
     </div>
   )
 }
