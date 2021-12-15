@@ -1,13 +1,15 @@
-const Notifcation = ({ message, messageType }) => {
-    if (message === null) {
-        return null
-    }
+import React from 'react'
 
-    return (
-        <div>
-            {message}
-        </div>
-    )
+const Notifcation = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div>
+      {message}
+    </div>
+  )
 }
 
 export default Notifcation
