@@ -1,15 +1,16 @@
 import React from 'react'
+import Alert from 'react-bootstrap/Alert'
 
-const Notifcation = ({ message }) => {
+const Notification = ({ message }) => {
     if (message === null) {
         return null
     }
 
     return (
-        <div>
-            {message}
-        </div>
+        <Alert variant={message.variant}>
+            {message.notification}
+        </Alert>
     )
 }
 
-export default Notifcation
+export default Notification
