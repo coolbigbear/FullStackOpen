@@ -1,7 +1,0 @@
-{
-    "git.ignoreLimitWarning": true,
-    "cSpell.language": "en-GB",
-    "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": true
-    }
-}
