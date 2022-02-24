@@ -4,3 +4,9 @@
 [submodule "TypeScript-FullStackOpen-2021"]
 	path = TypeScript-FullStackOpen-2021
 	url = https://github.com/coolbigbear/TypeScript-FullStackOpen-2021.git
+[submodule "CI-CD-FullStackOpen-2021/full-stack-open-pokedex"]
+	path = CI-CD-FullStackOpen-2021/full-stack-open-pokedex
+	url = https://github.com/coolbigbear/full-stack-open-pokedex.git
+[submodule "CI-CD-11.21-Fullstack-2021"]
+	path = CI-CD-FullStackOpen-2021/CI-CD-11.21-Fullstack-2021
+	url = https://github.com/coolbigbear/CI-CD-11.21-Fullstack-2021.git
