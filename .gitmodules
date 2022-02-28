@@ -10,3 +10,6 @@
 [submodule "CI-CD-11.21-Fullstack-2021"]
 	path = CI-CD-FullStackOpen-2021/CI-CD-11.21-Fullstack-2021
 	url = https://github.com/coolbigbear/CI-CD-11.21-Fullstack-2021.git
+[submodule "Containers-FullStackOpen-2021/part12-containers-applications"]
+	path = Containers-FullStackOpen-2021/part12-containers-applications
+	url = https://github.com/coolbigbear/part12-containers-applications.git
